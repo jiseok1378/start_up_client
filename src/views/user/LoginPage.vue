@@ -71,7 +71,7 @@ export default Vue.extend({
       console.log(this.signupInfo.userId);
     },
     clickSignup(): void {
-      this.$http.signupApi(this.signupInfo);
+      this.$http.signup(this.signupInfo);
     },
     clickLogin(): void {
       alert("로그인");
