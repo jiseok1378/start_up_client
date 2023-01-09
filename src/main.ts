@@ -7,6 +7,9 @@ import "roboto-fontface/css/roboto/roboto-fontface.css";
 import "@mdi/font/css/materialdesignicons.css";
 import ApiList from "./api/ApiList";
 
+import VuetifyDialog from "vuetify-dialog";
+import "vuetify-dialog/dist/vuetify-dialog.css";
+
 Vue.config.productionTip = false;
 Vue.prototype.$http = ApiList;
 
@@ -15,6 +18,12 @@ declare module "vue/types/vue" {
     $http: typeof ApiList;
   }
 }
+Vue.use(VuetifyDialog, {
+  context: {
+    vuetify,
+  },
+});
+
 new Vue({
   router,
   store,

@@ -67,11 +67,38 @@ export default Vue.extend({
       }
       this.signupInfo.registerType = value;
     },
-    checkDuplicate(): void {
-      console.log(this.signupInfo.userId);
+    async checkDuplicate(): Promise<void> {
+      const response = await this.$http.checkUserIdDuplication(
+        this.signupInfo.userId
+      );
+      const isNotDuplication = response.data;
+      if (isNotDuplication) {
+        this.$dialog.confirm({
+          title: "사용 가능한 아이디",
+          text: "사용 가능한 아이디입니다.",
+        });
+      } else {
+        this.$dialog.error({
+          title: "중복된 아이디",
+          text: "중복된 아이디입니다.",
+        });
+      }
     },
-    clickSignup(): void {
-      this.$http.signup(this.signupInfo);
+    async clickSignup(): Promise<void> {
+      const response = await this.$http.signup(this.signupInfo);
+      const status: number = response.status;
+      console.log(response);
+      if (status !== 200) {
+        this.$dialog.error({
+          title: "회원가입 불가",
+          text: "회원가입에 실패하였습니다. 정보를 확인해주세요.",
+        });
+      } else {
+        this.$dialog.confirm({
+          title: "회원가입 성공",
+          text: "회원가입에 성공하였습니다. 로그인 해주세요.",
+        });
+      }
     },
     clickLogin(): void {
       alert("로그인");
