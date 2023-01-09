@@ -10,9 +10,9 @@
       :signupInfo="signupInfo"
       :register="register"
       @change-register-type="changeRegisterType"
-      @change-id="(value) => (signupInfo.id = value)"
+      @change-id="(value) => (signupInfo.userId = value)"
       @change-password="(value) => (signupInfo.password = value)"
-      @change-username="(value) => (signupInfo.username = value)"
+      @change-username="(value) => (signupInfo.name = value)"
       @change-email="(value) => (signupInfo.email = value)"
       @change-register-number="(value) => (signupInfo.registerNumber = value)"
       @click-signup="clickSignup"
@@ -22,15 +22,25 @@
   </div>
 </template>
 <script lang="ts">
+import { SignupDto } from "@/api/ApiTypes";
 import Vue from "vue";
 import LoginContainer from "./loginPage/LoginContainer.vue";
 import SignupContainer from "./loginPage/SignupContainer.vue";
+interface LoginPageType {
+  isSignUp: boolean;
+  register: {
+    label: string;
+    types: string[];
+    number: number;
+  };
+  signupInfo: SignupDto;
+}
 export default Vue.extend({
   components: {
     LoginContainer,
     SignupContainer,
   },
-  data() {
+  data(): LoginPageType {
     return {
       isSignUp: false,
       register: {
@@ -39,11 +49,11 @@ export default Vue.extend({
         number: 0,
       },
       signupInfo: {
-        id: "",
+        userId: "",
         password: "",
-        username: "",
+        name: "",
         email: "",
-        registerType: "",
+        registerType: 0,
         registerNumber: "",
       },
     };
@@ -55,13 +65,13 @@ export default Vue.extend({
       } else {
         this.register.label = "사업자등록번호";
       }
-      this.signupInfo.registerType = this.register.types[value];
+      this.signupInfo.registerType = value;
     },
     checkDuplicate(): void {
-      console.log(this.signupInfo.id);
+      console.log(this.signupInfo.userId);
     },
     clickSignup(): void {
-      alert("회원가입");
+      this.$http.signupApi(this.signupInfo);
     },
     clickLogin(): void {
       alert("로그인");
