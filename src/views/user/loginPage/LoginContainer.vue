@@ -6,7 +6,7 @@
     <v-text-field class="text-field-size" label="비밀번호" />
     <div class="spacer" />
     <div class="d-flex">
-      <v-btn class="left-btn"> 로그인 </v-btn>
+      <v-btn class="left-btn" @click="$emit('click-login')"> 로그인 </v-btn>
       <v-btn @click="$emit('change-component', true)"> 회원가입 </v-btn>
     </div>
   </v-card>
