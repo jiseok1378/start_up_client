@@ -1,7 +1,18 @@
 <template>
   <v-container id="login-container" class="d-flex flex-column align-center">
-    <v-text-field class="text-field-size" label="아이디" />
-    <v-text-field class="text-field-size" label="비밀번호" />
+    <v-text-field
+      class="text-field-size"
+      @input="(v) => $emit('change-id', v)"
+      label="아이디"
+    />
+    <v-text-field
+      class="text-field-size"
+      label="비밀번호"
+      :append-icon="isShowPassword ? 'mdi-eye' : 'mdi-eye-off'"
+      :type="isShowPassword ? 'text' : 'password'"
+      @input="(v) => $emit('change-password', v)"
+      @click:append="isShowPassword = !isShowPassword"
+    />
     <div class="spacer" />
     <v-btn class="primary" @click="$emit('click-login')" block> 로그인 </v-btn>
     <a class="direction" @click="$emit('change-component', true)">
@@ -10,14 +21,26 @@
   </v-container>
 </template>
 
-<script>
-export default {};
+<script lang="ts">
+import Vue from "vue";
+export default Vue.extend({
+  props: {
+    signinInfo: {
+      type: Object,
+      default: () => ({}),
+    },
+  },
+  data() {
+    return {
+      isShowPassword: false,
+    };
+  },
+});
 </script>
-
 <style lang="scss" scope>
 #login-container {
   padding: 0px 30px;
-  width: 30rem;
+  width: 400px;
   .direction {
     margin-top: 20px;
   }

@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from "axios";
 const instance = axios.create({
-  baseURL: "http://localhost:8091/api/v1",
+  baseURL: "http://192.168.1.5:8091/api/v1",
   timeout: 1000,
   validateStatus: function (status) {
     // 상태 코드가 500 이상일 경우 거부. 나머지는 허용

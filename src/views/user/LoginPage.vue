@@ -11,8 +11,11 @@
     </div>
     <v-slide-x-transition v-if="!isSignUp" hide-on-leave>
       <login-container
+        :signinInfo="signinInfo"
         @click-login="clickLogin"
         @change-component="changeComponent"
+        @change-id="(value) => (signinInfo.userId = value)"
+        @change-password="(value) => (signinInfo.password = value)"
       />
     </v-slide-x-transition>
     <v-slide-x-transition v-else hide-on-leave>
@@ -33,7 +36,7 @@
   </div>
 </template>
 <script lang="ts">
-import { SignupDto } from "@/api/ApiTypes";
+import { SigninDto, SignupDto } from "@/api/ApiTypes";
 import Vue from "vue";
 import LoginContainer from "./loginPage/LoginContainer.vue";
 import SignupContainer from "./loginPage/SignupContainer.vue";
@@ -45,6 +48,7 @@ interface LoginPageType {
     types: string[];
     number: number;
   };
+  signinInfo: SigninDto;
   signupInfo: SignupDto;
 }
 export default Vue.extend({
@@ -60,6 +64,10 @@ export default Vue.extend({
         label: "",
         types: ["사용자", "기업"],
         number: 0,
+      },
+      signinInfo: {
+        userId: "",
+        password: "",
       },
       signupInfo: {
         userId: "",
@@ -89,7 +97,7 @@ export default Vue.extend({
       );
       const isNotDuplication = response.data;
       if (isNotDuplication) {
-        this.$dialog.confirm({
+        this.$dialog.info({
           title: "사용 가능한 아이디",
           text: "사용 가능한 아이디입니다.",
         });
@@ -110,14 +118,26 @@ export default Vue.extend({
           text: "회원가입에 실패하였습니다. 정보를 확인해주세요.",
         });
       } else {
-        this.$dialog.confirm({
+        this.$dialog.info({
           title: "회원가입 성공",
           text: "회원가입에 성공하였습니다. 로그인 해주세요.",
         });
       }
     },
-    clickLogin(): void {
-      alert("로그인");
+    async clickLogin(): Promise<void> {
+      const response = await this.$http.signin(this.signinInfo);
+      if (response.status === 200) {
+        this.$store.dispatch("setUserInfo", response.data);
+        this.$dialog.info({
+          title: "로그인 성공",
+          text: `로그인에 성공하셨습니다. 환영합니다. ${this.$store.state.userInfo.userName}님`,
+        });
+      } else {
+        this.$dialog.error({
+          title: "로그인 실패",
+          text: `로그인에 실패하셨습니다. 정보를 다시 한번 확인해주세요.`,
+        });
+      }
     },
     changeComponent(flag: boolean): void {
       this.isSignUp = flag;

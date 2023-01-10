@@ -50,7 +50,7 @@
       </template>
     </v-text-field>
     <div class="spacer"></div>
-    <v-btn @click="$emit('click-signup')" class="primary" block disabled>
+    <v-btn @click="$emit('click-signup')" class="primary" block>
       회원가입
     </v-btn>
     <a class="direction" @click="$emit('change-component', false)">
@@ -88,7 +88,7 @@ export default Vue.extend({
 <style lang="scss" scope>
 #signup-container {
   padding: 0px 30px;
-  width: 30rem;
+  width: 400px;
   .direction {
     margin-top: 20px;
   }

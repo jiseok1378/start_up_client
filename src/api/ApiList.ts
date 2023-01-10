@@ -1,4 +1,4 @@
-import { SignupDto } from "./ApiTypes";
+import { SignupDto, SigninDto, SigninResDto } from "./ApiTypes";
 import api from "./Axios";
 import { AxiosResponse } from "axios";
 export default {
@@ -7,5 +7,8 @@ export default {
   },
   checkUserIdDuplication: (userId: string): Promise<AxiosResponse<boolean>> => {
     return api.GET("/user/duplicate", { userId });
+  },
+  signin: (signinDto: SigninDto): Promise<AxiosResponse<SigninResDto>> => {
+    return api.POST("/login", signinDto);
   },
 };
