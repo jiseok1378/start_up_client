@@ -1,24 +1,35 @@
 <template>
-  <div id="login-page" class="d-flex justify-center align-center">
-    <login-container
-      v-if="!isSignUp"
-      @click-login="clickLogin"
-      @change-component="changeComponent"
-    />
-    <signup-container
-      v-else
-      :signupInfo="signupInfo"
-      :register="register"
-      @change-register-type="changeRegisterType"
-      @change-id="(value) => (signupInfo.userId = value)"
-      @change-password="(value) => (signupInfo.password = value)"
-      @change-username="(value) => (signupInfo.name = value)"
-      @change-email="(value) => (signupInfo.email = value)"
-      @change-register-number="(value) => (signupInfo.registerNumber = value)"
-      @click-signup="clickSignup"
-      @check-duplication="checkDuplicate"
-      @change-component="changeComponent"
-    />
+  <div
+    id="login-page"
+    class="d-flex flex-column justify-center align-center grey lighten-3"
+  >
+    <div class="d-flex flex-column align-center">
+      <div class="grey darken-4 icon-container">
+        <v-icon x-large dark> mdi-domain</v-icon>
+      </div>
+      <div id="description" class="text-h5">{{ pageDescription }}</div>
+    </div>
+    <v-slide-x-transition v-if="!isSignUp" hide-on-leave>
+      <login-container
+        @click-login="clickLogin"
+        @change-component="changeComponent"
+      />
+    </v-slide-x-transition>
+    <v-slide-x-transition v-else hide-on-leave>
+      <signup-container
+        :signupInfo="signupInfo"
+        :register="register"
+        @change-register-type="changeRegisterType"
+        @change-id="(value) => (signupInfo.userId = value)"
+        @change-password="(value) => (signupInfo.password = value)"
+        @change-username="(value) => (signupInfo.name = value)"
+        @change-email="(value) => (signupInfo.email = value)"
+        @change-register-number="(value) => (signupInfo.registerNumber = value)"
+        @click-signup="clickSignup"
+        @check-duplication="checkDuplicate"
+        @change-component="changeComponent"
+      />
+    </v-slide-x-transition>
   </div>
 </template>
 <script lang="ts">
@@ -28,6 +39,7 @@ import LoginContainer from "./loginPage/LoginContainer.vue";
 import SignupContainer from "./loginPage/SignupContainer.vue";
 interface LoginPageType {
   isSignUp: boolean;
+  pageDescription: string;
   register: {
     label: string;
     types: string[];
@@ -42,6 +54,7 @@ export default Vue.extend({
   },
   data(): LoginPageType {
     return {
+      pageDescription: "",
       isSignUp: false,
       register: {
         label: "",
@@ -57,6 +70,9 @@ export default Vue.extend({
         registerNumber: "",
       },
     };
+  },
+  created() {
+    this.changeComponent(false);
   },
   methods: {
     changeRegisterType(value: number): void {
@@ -105,6 +121,11 @@ export default Vue.extend({
     },
     changeComponent(flag: boolean): void {
       this.isSignUp = flag;
+      if (this.isSignUp == true) {
+        this.pageDescription = "Sign up to StartUp";
+      } else {
+        this.pageDescription = "Sign in to StartUp";
+      }
     },
   },
 });
@@ -112,6 +133,15 @@ export default Vue.extend({
 
 <style lang="scss" scope>
 #login-page {
+  .icon-container {
+    padding: 10px;
+    border-radius: 100%;
+  }
+  #description {
+    margin-top: 10px;
+    margin-bottom: 20px;
+  }
+
   width: 100%;
   height: 100%;
 }

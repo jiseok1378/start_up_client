@@ -1,15 +1,13 @@
 <template>
-  <v-card id="login-container" class="d-flex flex-column align-center">
-    <div class="text-h4">로그인</div>
-    <div class="spacer" />
+  <v-container id="login-container" class="d-flex flex-column align-center">
     <v-text-field class="text-field-size" label="아이디" />
     <v-text-field class="text-field-size" label="비밀번호" />
     <div class="spacer" />
-    <div class="d-flex">
-      <v-btn class="left-btn" @click="$emit('click-login')"> 로그인 </v-btn>
-      <v-btn @click="$emit('change-component', true)"> 회원가입 </v-btn>
-    </div>
-  </v-card>
+    <v-btn class="primary" @click="$emit('click-login')" block> 로그인 </v-btn>
+    <a class="direction" @click="$emit('change-component', true)">
+      계정이 없으신가요?
+    </a>
+  </v-container>
 </template>
 
 <script>
@@ -18,8 +16,12 @@ export default {};
 
 <style lang="scss" scope>
 #login-container {
-  padding: 30px;
+  padding: 0px 30px;
   width: 30rem;
+  .direction {
+    margin-top: 20px;
+  }
+
   .spacer {
     width: 100%;
     height: 20px;

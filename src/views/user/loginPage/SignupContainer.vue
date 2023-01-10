@@ -1,21 +1,26 @@
 <template>
-  <v-card id="signup-container" class="d-flex flex-column align-center">
-    <div class="text-h4">회원 가입</div>
-    <div class="spacer" />
+  <v-container id="signup-container" class="d-flex flex-column align-center">
     <v-text-field
       class="text-field-size"
       label="아이디"
-      :value="signupInfo.id"
       @input="(v) => $emit('change-id', v)"
     >
       <template v-slot:append>
-        <v-btn @click="$emit('check-duplication')">중복 확인</v-btn>
+        <v-btn
+          dark
+          :disabled="signupInfo.userId === ''"
+          @click="$emit('check-duplication')"
+          >중복 확인</v-btn
+        >
       </template>
     </v-text-field>
     <v-text-field
       class="text-field-size"
       label="비밀번호"
+      :append-icon="isShowPassword ? 'mdi-eye' : 'mdi-eye-off'"
+      :type="isShowPassword ? 'text' : 'password'"
       @input="(v) => $emit('change-password', v)"
+      @click:append="isShowPassword = !isShowPassword"
     />
     <v-text-field
       class="text-field-size"
@@ -36,6 +41,7 @@
         <v-btn-toggle
           v-model="registerType"
           @change="(v) => $emit('change-register-type', v)"
+          dark
         >
           <v-btn v-for="(value, index) in register.types" :key="index">
             {{ value }}
@@ -43,12 +49,14 @@
         </v-btn-toggle>
       </template>
     </v-text-field>
-    <div class="spacer" />
-    <div class="d-flex">
-      <v-btn @click="$emit('click-signup')" class="left-btn">회원가입</v-btn>
-      <v-btn @click="$emit('change-component', false)">로그인 페이지로</v-btn>
-    </div>
-  </v-card>
+    <div class="spacer"></div>
+    <v-btn @click="$emit('click-signup')" class="primary" block disabled>
+      회원가입
+    </v-btn>
+    <a class="direction" @click="$emit('change-component', false)">
+      이미 계정이 있으신가요?
+    </a>
+  </v-container>
 </template>
 
 <script lang="ts">
@@ -56,6 +64,7 @@ import Vue from "vue";
 export default Vue.extend({
   data() {
     return {
+      isShowPassword: false,
       registerType: 0,
     };
   },
@@ -78,14 +87,14 @@ export default Vue.extend({
 </script>
 <style lang="scss" scope>
 #signup-container {
-  padding: 30px;
+  padding: 0px 30px;
   width: 30rem;
+  .direction {
+    margin-top: 20px;
+  }
   .spacer {
     width: 100%;
     height: 20px;
-  }
-  .left-btn {
-    margin-right: 15px;
   }
   .text-field-size {
     width: 100%;
